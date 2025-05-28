@@ -3,6 +3,8 @@
 use App\Livewire\Settings\Appearance;
 use App\Livewire\Settings\Password;
 use App\Livewire\Settings\Profile;
+use App\Livewire\ListaProdutos;
+use App\Livewire\Carrinho;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -20,5 +22,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('settings/password', Password::class)->name('settings.password');
     Route::get('settings/appearance', Appearance::class)->name('settings.appearance');
 });
+
+Route::get('/produtos', ListaProdutos::class)->name('produtos');
+Route::get('/carrinho', Carrinho::class)->name('carrinho');
 
 require __DIR__.'/auth.php';
