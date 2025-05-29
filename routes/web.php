@@ -6,6 +6,7 @@ use App\Livewire\Settings\Profile;
 use App\Livewire\ListaProdutos;
 use App\Livewire\Carrinho;
 use App\Livewire\Checkout;
+use App\Livewire\CadastroCupom;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -27,5 +28,6 @@ Route::middleware(['auth'])->group(function () {
 Route::get('/produtos', ListaProdutos::class)->name('produtos');
 Route::get('/carrinho', Carrinho::class)->name('carrinho');
 Route::get('/checkout', Checkout::class)->name('checkout');
+Route::get('/cupons/cadastro', CadastroCupom::class)->name('cupons.cadastro');
 
 require __DIR__.'/auth.php';

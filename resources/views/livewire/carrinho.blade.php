@@ -29,4 +29,21 @@
     @else
         <p>O carrinho está vazio.</p>
     @endif
+    <div class="mt-4">
+        <form wire:submit.prevent="aplicarCupom" class="row g-2 align-items-end">
+            <div class="col-auto">
+                <label for="cupom_codigo" class="form-label">Cupom</label>
+                <input type="text" class="form-control" id="cupom_codigo" wire:model="cupom_codigo" placeholder="Código do cupom">
+            </div>
+            <div class="col-auto">
+                <button type="submit" class="btn btn-secondary">Aplicar</button>
+            </div>
+        </form>
+        @if($mensagem_cupom)
+            <div class="mt-2 alert alert-info">{{ $mensagem_cupom }}</div>
+        @endif
+        @if($desconto > 0)
+            <p class="mt-2">Desconto: <strong>-R$ {{ number_format($desconto, 2, ',', '.') }}</strong></p>
+        @endif
+    </div>
 </div>
