@@ -43,6 +43,7 @@ class Carrinho extends Component
             if ($total < 0) $total = 0;
         }
         $this->total = $total;
+        session(['total_checkout' => $this->total]);
     }
 
     public function aplicarCupom()
