@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use Livewire\Component;
+use App\Models\Cupom;
 
 class Carrinho extends Component
 {
@@ -10,6 +11,10 @@ class Carrinho extends Component
     public $subtotal = 0;
     public $frete = 0;
     public $total = 0;
+    public $cupom_codigo = '';
+    public $cupom_aplicado = null;
+    public $desconto = 0;
+    public $mensagem_cupom = '';
 
     protected $listeners = ['carrinhoAtualizado' => 'atualizarCarrinho'];
 
@@ -32,7 +37,43 @@ class Carrinho extends Component
         } else {
             $this->frete = 20;
         }
-        $this->total = $this->subtotal + $this->frete;
+        $total = $this->subtotal + $this->frete;
+        if ($this->cupom_aplicado) {
+            $total -= $this->desconto;
+            if ($total < 0) $total = 0;
+        }
+        $this->total = $total;
+    }
+
+    public function aplicarCupom()
+    {
+        $this->mensagem_cupom = '';
+        $cupom = Cupom::where('codigo', strtoupper($this->cupom_codigo))->first();
+        if (!$cupom) {
+            $this->mensagem_cupom = 'Cupom não encontrado.';
+            $this->desconto = 0;
+            $this->cupom_aplicado = null;
+            $this->atualizarCarrinho();
+            return;
+        }
+        if (now()->gt($cupom->validade)) {
+            $this->mensagem_cupom = 'Cupom expirado.';
+            $this->desconto = 0;
+            $this->cupom_aplicado = null;
+            $this->atualizarCarrinho();
+            return;
+        }
+        if ($this->subtotal < $cupom->valor_minimo) {
+            $this->mensagem_cupom = 'Valor mínimo para uso do cupom: R$ ' . number_format($cupom->valor_minimo, 2, ',', '.');
+            $this->desconto = 0;
+            $this->cupom_aplicado = null;
+            $this->atualizarCarrinho();
+            return;
+        }
+        $this->desconto = $cupom->valor_desconto;
+        $this->cupom_aplicado = $cupom;
+        $this->mensagem_cupom = 'Cupom aplicado com sucesso!';
+        $this->atualizarCarrinho();
     }
 
     public function render()
