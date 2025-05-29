@@ -1,0 +1,51 @@
+-- Criação do banco de dados
+CREATE DATABASE IF NOT EXISTS erp_montink;
+
+USE erp_montink;
+
+-- Tabela de produtos
+CREATE TABLE IF NOT EXISTS produtos (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(255) NOT NULL,
+    preco DECIMAL(10, 2) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+-- Tabela de estoques
+CREATE TABLE IF NOT EXISTS estoques (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    produto_id INT NOT NULL,
+    quantidade INT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (produto_id) REFERENCES produtos(id) ON DELETE CASCADE
+);
+
+-- Tabela de pedidos
+CREATE TABLE IF NOT EXISTS pedidos (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nome_cliente VARCHAR(255) NOT NULL,
+    email_cliente VARCHAR(255) NOT NULL,
+    cep VARCHAR(10) NOT NULL,
+    rua VARCHAR(255) NOT NULL,
+    bairro VARCHAR(255) NOT NULL,
+    cidade VARCHAR(255) NOT NULL,
+    uf VARCHAR(2) NOT NULL,
+    total DECIMAL(10, 2) NOT NULL,
+    status ENUM('novo', 'processando', 'concluído', 'cancelado') DEFAULT 'novo',
+    itens JSON NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+-- Tabela de cupons
+CREATE TABLE IF NOT EXISTS cupoms (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    codigo VARCHAR(20) UNIQUE NOT NULL,
+    valor_desconto DECIMAL(10, 2) NOT NULL,
+    validade DATE NOT NULL,
+    valor_minimo DECIMAL(10, 2) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
