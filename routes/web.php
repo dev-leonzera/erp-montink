@@ -5,6 +5,7 @@ use App\Livewire\Settings\Password;
 use App\Livewire\Settings\Profile;
 use App\Livewire\ListaProdutos;
 use App\Livewire\Carrinho;
+use App\Livewire\Checkout;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -25,5 +26,6 @@ Route::middleware(['auth'])->group(function () {
 
 Route::get('/produtos', ListaProdutos::class)->name('produtos');
 Route::get('/carrinho', Carrinho::class)->name('carrinho');
+Route::get('/checkout', Checkout::class)->name('checkout');
 
 require __DIR__.'/auth.php';
